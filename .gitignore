@@ -1,0 +1,47 @@
+# Maven build output
+target/
+
+# Mule runtime cache and temp files
+.mule/
+
+# Anypoint Studio project files
+.studio/
+.classpath
+.project
+.settings/
+*.launch
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# Eclipse
+*.class
+*.jar
+*.war
+*.ear
+
+# OS metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Environment / secrets — never commit these
+.env
+.env.local
+.env.*.local
+settings.xml
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.swp
+*~
