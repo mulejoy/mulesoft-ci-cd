@@ -17,10 +17,50 @@
 		<http.version>1.10.3</http.version>
 		<socket.version>1.2.5</socket.version>
 		<java.version>17</java.version>
-		<!-- CloudHub 2.0 deployment targets — override via -D flags in CI -->
-		<deployment.env>DEV</deployment.env>
 		<deployment.target>Cloudhub-US-East-2</deployment.target>
 	</properties>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<property>
+					<name>environment</name>
+					<value>DEV</value>
+				</property>
+			</activation>
+			<properties>
+				<deployment.env>DEV</deployment.env>
+				<deployment.appName>${project.artifactId}-dev</deployment.appName>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<activation>
+				<property>
+					<name>environment</name>
+					<value>TEST</value>
+				</property>
+			</activation>
+			<properties>
+				<deployment.env>TEST</deployment.env>
+				<deployment.appName>${project.artifactId}-test</deployment.appName>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<activation>
+				<property>
+					<name>environment</name>
+					<value>PROD</value>
+				</property>
+			</activation>
+			<properties>
+				<deployment.env>PROD</deployment.env>
+				<deployment.appName>${project.artifactId}</deployment.appName>
+			</properties>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>
@@ -42,7 +82,7 @@
 						<environment>${deployment.env}</environment>
 						<target>${deployment.target}</target>
 						<server>Repository</server>
-						<applicationName>${project.artifactId}</applicationName>
+						<applicationName>${deployment.appName}</applicationName>
 						<muleVersion>${app.runtime}</muleVersion>
 						<javaVersion>${java.version}</javaVersion>
 						<releaseChannel>EDGE</releaseChannel>

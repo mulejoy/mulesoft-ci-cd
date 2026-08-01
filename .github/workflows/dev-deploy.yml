@@ -1,0 +1,52 @@
+name: DEV Deploy
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    name: Deploy to DEV
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Configure Maven settings
+        uses: whelk-io/maven-settings-xml-action@v22
+        with:
+          repositories: |
+            [
+              {
+                "id": "anypoint-exchange-v3",
+                "url": "https://maven.anypoint.mulesoft.com/api/v3/maven"
+              },
+              {
+                "id": "mulesoft-releases",
+                "url": "https://repository.mulesoft.org/releases/"
+              }
+            ]
+          servers: |
+            [
+              {
+                "id": "Repository",
+                "username": "~~~Client~~~",
+                "password": "${{ secrets.CONNECTED_APP_CLIENT_ID }}~?~${{ secrets.CONNECTED_APP_CLIENT_SECRET }}"
+              }
+            ]
+
+      - name: Deploy to CloudHub 2.0 (DEV)
+        run: |
+          mvn deploy -DmuleDeploy \
+            -Denvironment=DEV \
+            --no-transfer-progress
